@@ -15,12 +15,18 @@ class CreateUserCommandHandler implements CommandHandlerInterface
 
     public function __invoke(CreateUserCommand $createUserCommand): array
     {
-        $user = $this->userFactory->create($createUserCommand->email, $createUserCommand->password);
+        $user = $this->userFactory->createBase(
+            $createUserCommand->email,
+            $createUserCommand->password,
+            $createUserCommand->name
+        );
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         return [
             'email' => $user->getEmail(),
+            'name' => $user->getName(),
+            'subscription' => $user->getSubscriptionId()->getName(),
         ];
     }
 }

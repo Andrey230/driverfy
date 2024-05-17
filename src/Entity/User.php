@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -33,6 +35,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Subscription $subscription_id = null;
+
+    /**
+     * @var Collection<int, Driver>
+     */
+    #[ORM\OneToMany(targetEntity: Driver::class, mappedBy: 'user_id', orphanRemoval: true)]
+    private Collection $drivers;
+
+    public function __construct()
+    {
+        $this->drivers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,5 +124,59 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSubscriptionId(): ?Subscription
+    {
+        return $this->subscription_id;
+    }
+
+    public function setSubscriptionId(?Subscription $subscription_id): static
+    {
+        $this->subscription_id = $subscription_id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Driver>
+     */
+    public function getDrivers(): Collection
+    {
+        return $this->drivers;
+    }
+
+    public function addDriver(Driver $driver): static
+    {
+        if (!$this->drivers->contains($driver)) {
+            $this->drivers->add($driver);
+            $driver->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDriver(Driver $driver): static
+    {
+        if ($this->drivers->removeElement($driver)) {
+            // set the owning side to null (unless already changed)
+            if ($driver->getUserId() === $this) {
+                $driver->setUserId(null);
+            }
+        }
+
+        return $this;
     }
 }
