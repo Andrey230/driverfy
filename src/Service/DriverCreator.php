@@ -6,6 +6,7 @@ use App\Entity\Driver;
 use App\Entity\User;
 use App\Factory\DriverFactory;
 use App\Repository\DriverRepository;
+use App\Service\MonthActivityCreator\MonthActivityCreatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -16,7 +17,8 @@ class DriverCreator implements DriverCreatorInterface
         private DriverFactory $driverFactory,
         private DriverParser $driverParser,
         private DriverRepository $driverRepository,
-        private Security $security
+        private Security $security,
+        private MonthActivityCreatorInterface $monthActivityCreator,
     )
     {
     }
@@ -40,8 +42,13 @@ class DriverCreator implements DriverCreatorInterface
             );
 
             $this->entityManager->persist($driver);
-            $this->entityManager->flush();
         }
+
+        foreach ($data['months'] as $month => $monthData){
+            $this->monthActivityCreator->create($driver, $month, $monthData);
+        }
+        $this->entityManager->flush();
+
 
         return $driver;
     }
