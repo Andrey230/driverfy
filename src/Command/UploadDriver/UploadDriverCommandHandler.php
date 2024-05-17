@@ -9,7 +9,7 @@ use App\Service\DriverCreatorInterface;
 
 class UploadDriverCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private DriverCreatorInterface $driverCreator)
+    public function __construct(private readonly DriverCreatorInterface $driverCreator)
     {
 
     }
@@ -18,11 +18,6 @@ class UploadDriverCommandHandler implements CommandHandlerInterface
     {
         $driver = $this->driverCreator->create($uploadDriverCommand->file);
 
-        return [
-            'name' => $driver->getName(),
-            'carNumber' => $driver->getCarNumber(),
-            'cardId' => $driver->getId(),
-            'user' => $driver->getUserId()->getId(),
-        ];
+        return $driver->toArray();
     }
 }

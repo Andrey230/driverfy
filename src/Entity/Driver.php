@@ -78,4 +78,15 @@ class Driver
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'carNumber' => $this->getCarNumber(),
+            'cardId' => $this->getCardId(),
+            //'user' => $this->getUserId()->getId(),
+        ];
+    }
 }

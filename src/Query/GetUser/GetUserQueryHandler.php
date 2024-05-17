@@ -8,11 +8,11 @@ use Symfony\Bundle\SecurityBundle\Security;
 
 class GetUserQueryHandler implements QueryHandlerInterface
 {
-    public function __construct(private Security $security)
+    public function __construct(private readonly Security $security)
     {
     }
 
-    public function __invoke(GetUserQuery $getUserQuery)
+    public function __invoke(GetUserQuery $getUserQuery): array
     {
         /** @var User $user */
         $user = $this->security->getUser();
@@ -22,12 +22,16 @@ class GetUserQueryHandler implements QueryHandlerInterface
 
     private function getResult(User $user): array
     {
-        $data = [
+        $drivers = [];
+        foreach ($user->getDrivers() as $driver){
+            $drivers[] = $driver->toArray();
+        }
+
+        return [
             'email' => $user->getEmail(),
             'name' => $user->getName(),
             'subscription' => $user->getSubscriptionId()->getName(),
+            'drivers' => $drivers,
         ];
-
-        return $data;
     }
 }

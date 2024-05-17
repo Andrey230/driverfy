@@ -9,7 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class CreateUserCommandHandler implements CommandHandlerInterface
 {
-    public function __construct(private UserFactory $userFactory, private EntityManagerInterface $entityManager)
+    public function __construct(
+        private readonly UserFactory $userFactory,
+        private readonly EntityManagerInterface $entityManager
+    )
     {
     }
 

@@ -46,7 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Driver>
      */
-    #[ORM\OneToMany(targetEntity: Driver::class, mappedBy: 'user_id', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Driver::class, mappedBy: 'userId', orphanRemoval: true)]
     private Collection $drivers;
 
     public function __construct()
