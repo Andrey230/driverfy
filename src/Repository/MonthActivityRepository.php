@@ -32,15 +32,29 @@ class MonthActivityRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-        public function findByMonth(Driver $driver, string $month): ?MonthActivity
-        {
-            return $this->createQueryBuilder('m')
-                ->andWhere('m.month = :val')
-                ->andWhere('m.driver_id = :driver')
-                ->setParameter('val', $month)
-                ->setParameter('driver', $driver)
-                ->getQuery()
-                ->getOneOrNullResult()
+    public function findByMonth(Driver $driver, string $month): ?MonthActivity
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.month = :val')
+            ->andWhere('m.driver_id = :driver')
+            ->setParameter('val', $month)
+            ->setParameter('driver', $driver)
+            ->getQuery()
+            ->getOneOrNullResult()
             ;
-        }
+    }
+
+    public function findDriversByMonthAndUserId(string $month, string $id)
+    {
+        return $this->createQueryBuilder('ma')
+            ->join('ma.driver_id', 'd')
+            ->join('d.userId', 'u')
+            ->andWhere('ma.month = :month')
+            ->andWhere('u.id = :userId')
+            ->setParameter('month', $month)
+            ->setParameter('userId', $id)
+            ->orderBy('ma.total_points', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -165,7 +165,7 @@ class MonthActivity
             'totalDrive' => $this->getTotalDrive(),
             'totalWork' => $this->getTotalWork(),
             'days' => $this->getDays(),
-            'driver' => $this->getDriverId()->getId(),
+            'driver' => $this->getDriverId()->toArray(),
         ];
     }
 }

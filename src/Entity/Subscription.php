@@ -117,4 +117,13 @@ class Subscription
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'name' => $this->getName(),
+            'maxDrivers' => $this->getMaxDrivers(),
+            'price' => $this->getPrice(),
+        ];
+    }
 }

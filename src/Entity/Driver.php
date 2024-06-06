@@ -94,16 +94,12 @@ class Driver
 
     public function toArray(): array
     {
-        $activities = array_map(function (MonthActivity $monthActivity) {
-            return $monthActivity->toArray();
-        }, $this->getMonthActivities()->toArray());
-
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
             'carNumber' => $this->getCarNumber(),
             'cardId' => $this->getCardId(),
-            'activities' => $activities,
+            //'activities' => $activities,
             //'user' => $this->getUserId()->getId(),
         ];
     }

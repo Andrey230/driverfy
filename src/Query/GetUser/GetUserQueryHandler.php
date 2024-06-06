@@ -30,7 +30,7 @@ class GetUserQueryHandler implements QueryHandlerInterface
         return [
             'email' => $user->getEmail(),
             'name' => $user->getName(),
-            'subscription' => $user->getSubscriptionId()->getName(),
+            'subscription' => $user->getSubscriptionId()->toArray(),
             'drivers' => $drivers,
         ];
     }
