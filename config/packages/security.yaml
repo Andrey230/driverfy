@@ -20,6 +20,7 @@ security:
                 check_path: /api/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                username_path: email
                 
         create_user:
             pattern: ^/api/users/create
@@ -41,7 +42,7 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/api/users/create, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
 when@test:
     security:
