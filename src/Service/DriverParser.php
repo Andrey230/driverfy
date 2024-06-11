@@ -2,20 +2,29 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 class DriverParser implements ParserInterface
 {
-    const FILE_PATH = '../src/Fixtures/data.json';
+    const SCRIPT_PATH = '../src/Fixtures/dddxml.centos7';
 
     public function parse(string $file): array
     {
-        if(!file_exists(self::FILE_PATH)){
-            throw new NotFoundHttpException('file not found');
-        }
+        $scriptPath = self::SCRIPT_PATH;
+        $tempFile = $this->getTempFile($file);
 
-        $contentFile = file_get_contents(self::FILE_PATH);
-        $data = json_decode($contentFile, true);
+        chmod($scriptPath, 0755);
+
+        $command = escapeshellcmd("$scriptPath -j $tempFile");
+
+        $output = [];
+        $return_var = 0;
+        exec($command . ' 2>&1', $output, $return_var);
+
+        $json_string = implode("\n", $output);
+        $data = json_decode($json_string, true);
+
+        if(empty($data)){
+            throw new \Exception('Invalid parse date');
+        }
 
         $result = [];
         $months = [];
@@ -83,8 +92,8 @@ class DriverParser implements ParserInterface
                     'name' => $block['HolderIdentification']['CardHolderName']['HolderSurname'].' '.$block['HolderIdentification']['CardHolderName']['HolderFirstNames'],
                     'id' => $block['Identification']['CardNumber']['Full']
                 ];
-            }elseif ($block['Type'] === 'DriverCardEventsData'){
-                $result['driverInfo']['carNumber'] = end($block['CardEventData']['CardEventRecordRecords'])['EventVehicleRegistration']['VehicleRegistrationNumber'];
+            }elseif ($block['Type'] === 'DriverCardCurrentUsage'){
+                $result['driverInfo']['carNumber'] = $block['CardCurrentUse']['SessionOpenVehicle']['VehicleRegistrationNumber'];
             }
         }
 
@@ -133,6 +142,8 @@ class DriverParser implements ParserInterface
                 $avgDistance = $monthObject['totalDistance'] / $totalWorkDays;
                 $monthObject['averageDistance'] = $avgDistance;
                 $points += (int) $avgDistance / 100;
+            }else{
+                $monthObject['averageDistance'] = 0;
             }
 
             $monthObject['totalPoints'] = $points;
@@ -143,5 +154,20 @@ class DriverParser implements ParserInterface
         $result['months'] = array_reverse($months);
 
         return $result;
+    }
+
+    private function getTempFile(string $file): string
+    {
+        $fileData = base64_decode($file);
+
+        $tempFileName = tempnam(sys_get_temp_dir(), 'test_') . '.ddd';
+
+        file_put_contents($tempFileName, $fileData);
+
+        if(!file_exists($tempFileName)){
+            throw new \Exception('file not saved');
+        }
+
+        return $tempFileName;
     }
 }

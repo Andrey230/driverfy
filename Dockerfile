@@ -87,6 +87,15 @@ RUN set -eux; \
 COPY --link . ./
 RUN rm -Rf frankenphp/
 
+# Set execute permissions for the script
+RUN chmod +x src/Fixtures/dddxml.ubuntu;
+
+# Set execute permissions for the script
+RUN chmod +x src/Fixtures/test.ddd;
+
+# Устанавливаем права на выполнение для скрипта
+COPY --link --chmod=755 src/Fixtures/dddxml.ubuntu src/Fixtures/dddxmlss.ubuntu
+
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
 	composer dump-autoload --classmap-authoritative --no-dev; \
