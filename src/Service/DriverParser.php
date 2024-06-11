@@ -4,7 +4,7 @@ namespace App\Service;
 
 class DriverParser implements ParserInterface
 {
-    const SCRIPT_PATH = '../src/Fixtures/dddxml.centos7';
+    const SCRIPT_PATH = '../src/Fixtures/dddxml.ubuntu';
 
     public function parse(string $file): array
     {
