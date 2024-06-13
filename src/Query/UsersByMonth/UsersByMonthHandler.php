@@ -16,15 +16,13 @@ class UsersByMonthHandler implements QueryHandlerInterface
     {
     }
 
-    public function __invoke(UsersByMonthQuery $usersByMonthQuery)
+    public function __invoke(UsersByMonthQuery $usersByMonthQuery): array
     {
         /** @var MonthActivity[] $result */
         $result = $this->monthActivityRepository->findDriversByMonthAndUserId(
             $usersByMonthQuery->month,
             $this->security->getUser()->getId()
         );
-
-
 
         return array_map(function ($monthActivity) {
             return $monthActivity->toArray(true);
