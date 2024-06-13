@@ -27,7 +27,7 @@ class UsersByMonthHandler implements QueryHandlerInterface
 
 
         return array_map(function ($monthActivity) {
-            return $monthActivity->toArray();
+            return $monthActivity->toArray(true);
         }, $result);
     }
 }

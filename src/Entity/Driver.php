@@ -92,16 +92,24 @@ class Driver
         return $this;
     }
 
-    public function toArray(): array
+    public function toArray(bool $withActivities = false): array
     {
-        return [
+        $data = [
             'id' => $this->getId(),
             'name' => $this->getName(),
             'carNumber' => $this->getCarNumber(),
             'cardId' => $this->getCardId(),
-            //'activities' => $activities,
-            //'user' => $this->getUserId()->getId(),
         ];
+
+        if($withActivities){
+            $activities = array_map(function ($activity){
+                return $activity->toArray();
+            }, $this->getMonthActivities()->toArray());
+
+            $data['activities'] = $activities;
+        }
+
+        return $data;
     }
 
     /**

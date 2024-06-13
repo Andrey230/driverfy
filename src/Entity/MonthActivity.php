@@ -154,9 +154,9 @@ class MonthActivity
         return $this;
     }
 
-    public function toArray(): array
+    public function toArray(bool $withDriver = false): array
     {
-        return [
+        $data = [
             'month' => $this->getMonth(),
             'totalPoints' => $this->getTotalPoints(),
             'totalDistance' => $this->getTotalDistance(),
@@ -165,7 +165,12 @@ class MonthActivity
             'totalDrive' => $this->getTotalDrive(),
             'totalWork' => $this->getTotalWork(),
             'days' => $this->getDays(),
-            'driver' => $this->getDriverId()->toArray(),
         ];
+        
+        if($withDriver){
+            $data['driver'] = $this->getDriverId()->toArray();
+        }
+
+        return $data;
     }
 }
