@@ -19,6 +19,8 @@ class MonthActivityFactory
         $monthActivity->setTotalWorkDays($activityDTO->totalWorkDays);
         $monthActivity->setDays($activityDTO->days);
         $monthActivity->setMonth($activityDTO->month);
+        $monthActivity->setCountEight($activityDTO->countEight);
+        $monthActivity->setCountNine($activityDTO->countNine);
 
         return $monthActivity;
     }
@@ -32,6 +34,8 @@ class MonthActivityFactory
         $monthActivity->setTotalWork($activityDTO->totalWork);
         $monthActivity->setTotalWorkDays($activityDTO->totalWorkDays);
         $monthActivity->setDays($activityDTO->days);
+        $monthActivity->setCountEight($activityDTO->countEight);
+        $monthActivity->setCountNine($activityDTO->countNine);
 
         return $monthActivity;
     }

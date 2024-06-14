@@ -30,6 +30,8 @@ class MonthActivityCreator implements MonthActivityCreatorInterface
             $activities['totalWorkDays'],
             $activities['totalDriveTime'],
             $activities['totalWorkTime'],
+            $activities['countEightPlus'],
+            $activities['countNinePlus'],
             $activities['days'],
         );
 

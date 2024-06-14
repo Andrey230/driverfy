@@ -41,6 +41,12 @@ class MonthActivity
     #[ORM\Column]
     private array $days = [];
 
+    #[ORM\Column]
+    private ?int $count_eight = null;
+
+    #[ORM\Column]
+    private ?int $count_nine = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -164,13 +170,39 @@ class MonthActivity
             'totalWorkDays' => $this->getTotalWorkDays(),
             'totalDrive' => $this->getTotalDrive(),
             'totalWork' => $this->getTotalWork(),
+            'countEight' => $this->getCountEight(),
+            'countNine' => $this->getCountNine(),
             'days' => $this->getDays(),
         ];
-        
+
         if($withDriver){
             $data['driver'] = $this->getDriverId()->toArray();
         }
 
         return $data;
+    }
+
+    public function getCountEight(): ?int
+    {
+        return $this->count_eight;
+    }
+
+    public function setCountEight(int $count_eight): static
+    {
+        $this->count_eight = $count_eight;
+
+        return $this;
+    }
+
+    public function getCountNine(): ?int
+    {
+        return $this->count_nine;
+    }
+
+    public function setCountNine(int $count_nine): static
+    {
+        $this->count_nine = $count_nine;
+
+        return $this;
     }
 }

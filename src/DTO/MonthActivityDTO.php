@@ -15,6 +15,8 @@ class MonthActivityDTO
         public int $totalWorkDays,
         public int $totalDrive,
         public int $totalWork,
+        public int $countEight,
+        public int $countNine,
         public array $days,
     )
     {

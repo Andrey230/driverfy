@@ -104,6 +104,8 @@ class DriverParser implements ParserInterface
             $totalWorkDays = 0;
             $totalDriveTime = 0;
             $totalWorkTime = 0;
+            $countEightPlus = 0;
+            $countNinePlus = 0;
 
             foreach ($monthObject['days'] as $day){
                 if($day['nightDrive']){
@@ -122,12 +124,12 @@ class DriverParser implements ParserInterface
                         $points += 10;
                     }
 
-                    if($day['activities']['DRIVING'] >= 480){
-                        $points += 10;
-                    }
-
                     if($day['activities']['DRIVING'] >= 540){
                         $points += 10;
+                        $countNinePlus++;
+                    }elseif ($day['activities']['DRIVING'] >= 480){
+                        $points += 10;
+                        $countEightPlus++;
                     }
                 }
             }
@@ -149,6 +151,8 @@ class DriverParser implements ParserInterface
             $monthObject['totalPoints'] = $points;
             $monthObject['totalWorkTime'] = $totalWorkTime;
             $monthObject['totalDriveTime'] = $totalDriveTime;
+            $monthObject['countEightPlus'] = $countEightPlus;
+            $monthObject['countNinePlus'] = $countNinePlus;
         }
 
         $result['months'] = array_reverse($months);
