@@ -6,6 +6,9 @@ class DriverParser implements ParserInterface
 {
     const SCRIPT_PATH = '../src/Fixtures/dddxml.ubuntu';
 
+    const FULL_DAY_START = 1410;
+    const FULL_DAY_END = 600;
+
     public function parse(string $file): array
     {
         $scriptPath = self::SCRIPT_PATH;
@@ -46,11 +49,42 @@ class DriverParser implements ParserInterface
                         'activities' => [
                             'REST' => 0,
                             'WORK' => 0,
-                            'DRIVING' => 0
+                            'DRIVING' => 0,
+                            'AVAILABILITY' => 0,
                         ]
                     ];
 
                     $dayActivities = $record['ActivityChangeInfoRecords'];
+
+                    $dayType = 'DAY_OFF';
+
+                    $activeFirstActivity = $record['ActivityChangeInfoRecords'][0]['CardStatus'] == '0x00';
+
+                    if(count($record['ActivityChangeInfoRecords']) === 1){
+                        if($activeFirstActivity){
+                            $dayType = 'FULL';
+                        }
+                    }else{
+                        if(!$activeFirstActivity){
+                            $startOfWork = $record['ActivityChangeInfoRecords'][1]['Minutes'];
+
+                            if($startOfWork >= self::FULL_DAY_START){
+                                $dayType = 'HALF';
+                            }
+                        }else{
+                            $lastActivity = end($record['ActivityChangeInfoRecords']);
+                            $dayIsEnd = $lastActivity['CardStatus'] == '0x01';
+
+                            if($dayIsEnd){
+                                $dayType = $lastActivity['Minutes'] <= self::FULL_DAY_END ? 'HALF' : 'FULL';
+                            }else{
+                                $dayType = 'FULL';
+                            }
+                        }
+                    }
+
+                    $dayData['dayType'] = $dayType;
+
 
                     foreach ($dayActivities as $i => $currentActivity) {
 
@@ -60,6 +94,9 @@ class DriverParser implements ParserInterface
                                 break;
                             case "0x02":
                                 $activityStatus = "WORK";
+                                break;
+                            case "0x01":
+                                $activityStatus = "AVAILABILITY";
                                 break;
                             case "0x00":
                                 $activityStatus = "REST";
@@ -108,12 +145,22 @@ class DriverParser implements ParserInterface
             $countNinePlus = 0;
 
             foreach ($monthObject['days'] as $day){
+
+                switch ($day['dayType']){
+                    case "FULL":
+                        $totalWorkDays++;
+                        break;
+                    case "HALF":
+                        $totalWorkDays+= 0.5;
+                        break;
+                }
+
+
                 if($day['nightDrive']){
                     $points += 20;
                 }
 
                 if($day['distance'] > 0){
-                    $totalWorkDays++;
 
                     $totalWork = $day['activities']['DRIVING'] + $day['activities']['WORK'];
 
@@ -173,5 +220,29 @@ class DriverParser implements ParserInterface
         }
 
         return $tempFileName;
+    }
+
+    private function printDayActivities(array $records): void
+    {
+        foreach ($records as $record){
+            $date = new \DateTime($record['ActivityRecordDate']);
+
+
+            echo '<h1>'.$date->format('Y-m-d').'</h1>';
+
+
+            echo '<p>Оплата: '.$dayPaid.'</p>';
+
+
+
+        }
+        die;
+    }
+
+    private function convertMinutesToTime($totalMinutes): string
+    {
+        $hours = floor($totalMinutes / 60);
+        $minutes = $totalMinutes % 60;
+        return sprintf('%02d:%02d', $hours, $minutes);
     }
 }

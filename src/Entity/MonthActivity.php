@@ -30,7 +30,7 @@ class MonthActivity
     private ?int $average_distance = null;
 
     #[ORM\Column]
-    private ?int $total_work_days = null;
+    private ?float $total_work_days = null;
 
     #[ORM\Column]
     private ?int $total_drive = null;
@@ -112,12 +112,12 @@ class MonthActivity
         return $this;
     }
 
-    public function getTotalWorkDays(): ?int
+    public function getTotalWorkDays(): ?float
     {
         return $this->total_work_days;
     }
 
-    public function setTotalWorkDays(int $total_work_days): static
+    public function setTotalWorkDays(float $total_work_days): static
     {
         $this->total_work_days = $total_work_days;
 
