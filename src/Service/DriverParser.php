@@ -70,6 +70,8 @@ class DriverParser implements ParserInterface
 
                             if($startOfWork >= self::FULL_DAY_START){
                                 $dayType = 'HALF';
+                            }else{
+                                $dayType = 'FULL';
                             }
                         }else{
                             $lastActivity = end($record['ActivityChangeInfoRecords']);
@@ -84,6 +86,8 @@ class DriverParser implements ParserInterface
                     }
 
                     $dayData['dayType'] = $dayType;
+
+                    $refactorActivities = [];
 
 
                     foreach ($dayActivities as $i => $currentActivity) {
@@ -103,6 +107,13 @@ class DriverParser implements ParserInterface
                                 break;
                         }
 
+
+                        $refactorActivities[] = [
+                            'activity' => $activityStatus,
+                            'cardStatus' => $currentActivity['CardStatus'] == '0x01' ? 'inactive' : 'active',
+                            'time' => $this->convertMinutesToTime($currentActivity['Minutes'])
+                        ];
+
                         $nextActivity = $dayActivities[$i + 1] ?? null;
                         $currentTime = (int)$currentActivity['Minutes'];
                         $nextTime = $nextActivity ? (int)$nextActivity['Minutes'] : 24 * 60;
@@ -116,6 +127,7 @@ class DriverParser implements ParserInterface
                         }
                     }
 
+                    $dayData['refactorActivities'] = $refactorActivities;
                     $dayData['nightDrive'] = $nightDrive;
 
                     $totalDistance = $months[$monthKey]['totalDistance'] ?? 0;
@@ -220,23 +232,6 @@ class DriverParser implements ParserInterface
         }
 
         return $tempFileName;
-    }
-
-    private function printDayActivities(array $records): void
-    {
-        foreach ($records as $record){
-            $date = new \DateTime($record['ActivityRecordDate']);
-
-
-            echo '<h1>'.$date->format('Y-m-d').'</h1>';
-
-
-            echo '<p>Оплата: '.$dayPaid.'</p>';
-
-
-
-        }
-        die;
     }
 
     private function convertMinutesToTime($totalMinutes): string

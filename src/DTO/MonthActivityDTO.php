@@ -12,7 +12,7 @@ class MonthActivityDTO
         public int $totalPoints,
         public int $totalDistance,
         public int $averageDistance,
-        public int $totalWorkDays,
+        public float $totalWorkDays,
         public int $totalDrive,
         public int $totalWork,
         public int $countEight,
