@@ -111,7 +111,8 @@ class DriverParser implements ParserInterface
                         $refactorActivities[] = [
                             'activity' => $activityStatus,
                             'cardStatus' => $currentActivity['CardStatus'] == '0x01' ? 'inactive' : 'active',
-                            'time' => $this->convertMinutesToTime($currentActivity['Minutes'])
+                            'time' => $this->convertMinutesToTime($currentActivity['Minutes']),
+                            'minutes' => $currentActivity['Minutes'],
                         ];
 
                         $nextActivity = $dayActivities[$i + 1] ?? null;
