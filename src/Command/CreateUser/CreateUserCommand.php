@@ -10,6 +10,8 @@ class CreateUserCommand implements CommandInterface
         public string $email,
         public string $password,
         public string $name,
+        public int $fullDayStart,
+        public int $fullDayEnd,
     )
     {
     }

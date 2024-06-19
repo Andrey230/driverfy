@@ -17,7 +17,7 @@ class UserFactory
     {
     }
 
-    public function createBase(string $email, string $password, string $name): User
+    public function createBase(string $email, string $password, string $name, int $fullDayStart, int $fullDayEnd): User
     {
         $subscription = $this->subscriptionRepository->findByName(Subscription::BASE_SUBSCRIPTION);
 
@@ -31,6 +31,10 @@ class UserFactory
         $user->setPassword($password, $this->passwordHasher);
         $user->setRoles(['ROLE_USER']);
         $user->setSubscriptionId($subscription);
+        $user->setOptions([
+            'full_day_start' => $fullDayStart,
+            'full_day_end' => $fullDayEnd,
+        ]);
 
         return $user;
     }

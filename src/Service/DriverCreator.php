@@ -25,15 +25,16 @@ class DriverCreator implements DriverCreatorInterface
 
     public function create(string $file): Driver
     {
-        $data = $this->driverParser->parse($file);
+        /** @var User $user */
+        $user = $this->security->getUser();
+        $options = $user->getOptions();
+
+        $data = $this->driverParser->parse($file, $options['full_day_start'], $options['full_day_end']);
         $driverInfo = $data['driverInfo'];
 
         $driver = $this->driverRepository->findByCardId($driverInfo['id']);
 
         if(!$driver){
-            /** @var User $user */
-            $user = $this->security->getUser();
-
             $driver = $this->driverFactory->createDriver(
                 $driverInfo['name'],
                 $driverInfo['carNumber'],

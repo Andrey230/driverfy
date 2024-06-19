@@ -6,10 +6,7 @@ class DriverParser implements ParserInterface
 {
     const SCRIPT_PATH = '../src/Fixtures/dddxml.ubuntu';
 
-    const FULL_DAY_START = 1410;
-    const FULL_DAY_END = 600;
-
-    public function parse(string $file): array
+    public function parse(string $file, int $fullDayStart, int $fullDayEnd): array
     {
         $scriptPath = self::SCRIPT_PATH;
         $tempFile = $this->getTempFile($file);
@@ -68,7 +65,7 @@ class DriverParser implements ParserInterface
                         if(!$activeFirstActivity){
                             $startOfWork = $record['ActivityChangeInfoRecords'][1]['Minutes'];
 
-                            if($startOfWork >= self::FULL_DAY_START){
+                            if($startOfWork >= $fullDayStart){
                                 $dayType = 'HALF';
                             }else{
                                 $dayType = 'FULL';
@@ -78,7 +75,7 @@ class DriverParser implements ParserInterface
                             $dayIsEnd = $lastActivity['CardStatus'] == '0x01';
 
                             if($dayIsEnd){
-                                $dayType = $lastActivity['Minutes'] <= self::FULL_DAY_END ? 'HALF' : 'FULL';
+                                $dayType = $lastActivity['Minutes'] <= $fullDayEnd ? 'HALF' : 'FULL';
                             }else{
                                 $dayType = 'FULL';
                             }

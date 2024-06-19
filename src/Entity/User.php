@@ -49,6 +49,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Driver::class, mappedBy: 'userId', orphanRemoval: true)]
     private Collection $drivers;
 
+    #[ORM\Column]
+    private array $options = [];
+
     public function __construct()
     {
         $this->drivers = new ArrayCollection();
@@ -176,6 +179,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $driver->setUserId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getOptions(): array
+    {
+        return $this->options;
+    }
+
+    public function setOptions(array $options): static
+    {
+        $this->options = $options;
 
         return $this;
     }

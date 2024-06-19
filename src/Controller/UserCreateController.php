@@ -23,7 +23,13 @@ class UserCreateController extends AbstractController
         $params = $request->toArray();
         try {
             $this->validateParams($params);
-            $command = new CreateUserCommand($params['email'], $params['password'], $params['name']);
+            $command = new CreateUserCommand(
+                $params['email'],
+                $params['password'],
+                $params['name'],
+                $params['fullDayStart'],
+                $params['fullDayEnd']
+            );
             $user = $this->commandBus->execute($command);
             return $this->json($user);
         }catch (\Exception $exception){
@@ -39,5 +45,11 @@ class UserCreateController extends AbstractController
         Assert::string($params['password']);
         Assert::minLength($params['password'], 8);
         Assert::string($params['name']);
+        Assert::notEmpty($params['fullDayStart']);
+        Assert::notEmpty($params['fullDayEnd']);
+        Assert::greaterThanEq($params['fullDayStart'], 0);
+        Assert::lessThanEq($params['fullDayStart'], 1440);
+        Assert::greaterThanEq($params['fullDayEnd'], 0);
+        Assert::lessThanEq($params['fullDayEnd'], 1440);
     }
 }

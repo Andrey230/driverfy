@@ -21,7 +21,9 @@ class CreateUserCommandHandler implements CommandHandlerInterface
         $user = $this->userFactory->createBase(
             $createUserCommand->email,
             $createUserCommand->password,
-            $createUserCommand->name
+            $createUserCommand->name,
+            $createUserCommand->fullDayStart,
+            $createUserCommand->fullDayEnd,
         );
         $this->entityManager->persist($user);
         $this->entityManager->flush();
