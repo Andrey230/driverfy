@@ -40,9 +40,6 @@ class DriverParser implements ParserInterface
                 throw new NotFoundHttpException('parser not found by version');
         }
 
-
-        $parser->parse();
-
         return $parser->parse();
 
     }
