@@ -31,11 +31,13 @@ class DriverRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-        public function findByCardId(string $cardId): ?Driver
+        public function findByCardId(string $cardId, int $userId): ?Driver
         {
             return $this->createQueryBuilder('d')
                 ->andWhere('d.cardId = :val')
+                ->andWhere('d.userId = :userId')
                 ->setParameter('val', $cardId)
+                ->setParameter('userId', $userId)
                 ->getQuery()
                 ->getOneOrNullResult()
             ;

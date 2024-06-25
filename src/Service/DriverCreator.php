@@ -32,7 +32,7 @@ class DriverCreator implements DriverCreatorInterface
         $data = $this->driverParser->parse($file, $options['full_day_start'], $options['full_day_end']);
         $driverInfo = $data['driverInfo'];
 
-        $driver = $this->driverRepository->findByCardId($driverInfo['id']);
+        $driver = $this->driverRepository->findByCardId($driverInfo['id'], $user->getId());
 
         if(!$driver){
             $driver = $this->driverFactory->createDriver(

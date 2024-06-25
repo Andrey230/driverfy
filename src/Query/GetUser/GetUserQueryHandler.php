@@ -32,6 +32,7 @@ class GetUserQueryHandler implements QueryHandlerInterface
             'name' => $user->getName(),
             'subscription' => $user->getSubscriptionId()->toArray(),
             'drivers' => $drivers,
+            'options' => $user->getOptions()
         ];
     }
 }
