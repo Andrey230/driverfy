@@ -120,8 +120,8 @@ class ParserVersion1 extends AbstractParser
                     'name' => $block['HolderIdentification']['CardHolderName']['HolderSurname'].' '.$block['HolderIdentification']['CardHolderName']['HolderFirstNames'],
                     'id' => $block['Identification']['CardNumber']['Full']
                 ];
-            }elseif ($block['Type'] === 'DriverCardCurrentUsage'){
-                $result['driverInfo']['carNumber'] = $block['CardCurrentUse']['SessionOpenVehicle']['VehicleRegistrationNumber'];
+            }elseif ($block['Type'] === 'DriverCardVehiclesUsed'){
+                $result['driverInfo']['carNumber'] = end($block['CardVehiclesUsed']['CardVehicleRecordRecords'])['VehicleRegistration']['VehicleRegistrationNumber'];
             }
         }
 
