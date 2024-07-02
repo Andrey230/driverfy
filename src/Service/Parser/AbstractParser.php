@@ -156,18 +156,17 @@ abstract class AbstractParser implements ParserInterface
             $countries = [];
 
             if(count($record['ActivityChangeInfoRecords']) === 1){
+                $currentCountry = $this->getCountryByDate($date->getTimestamp());
+
                 if($activeFirstActivity){
                     $dayType = 'FULL';
                 }else{
-
-                    $currentCountry = $this->getCountryByDate($date->getTimestamp());
-
                     if($currentCountry && $currentCountry !== 'PL'){
                         $dayType = 'UNKNOWN';
                     }
-
-                    $countries[] = $currentCountry ?? [];
                 }
+
+                $countries[] = $currentCountry ?? [];
             }else{
                 if(!$activeFirstActivity){
                     $startOfWork = $record['ActivityChangeInfoRecords'][1]['Minutes'];
