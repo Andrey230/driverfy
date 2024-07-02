@@ -21,6 +21,7 @@ class MonthActivityFactory
         $monthActivity->setMonth($activityDTO->month);
         $monthActivity->setCountEight($activityDTO->countEight);
         $monthActivity->setCountNine($activityDTO->countNine);
+        $monthActivity->setTotalUnknownDays($activityDTO->totalUnknownDays);
 
         return $monthActivity;
     }
@@ -33,6 +34,7 @@ class MonthActivityFactory
         $monthActivity->setTotalDrive($activityDTO->totalDrive);
         $monthActivity->setTotalWork($activityDTO->totalWork);
         $monthActivity->setTotalWorkDays($activityDTO->totalWorkDays);
+        $monthActivity->setTotalUnknownDays($activityDTO->totalUnknownDays);
         $monthActivity->setDays($activityDTO->days);
         $monthActivity->setCountEight($activityDTO->countEight);
         $monthActivity->setCountNine($activityDTO->countNine);

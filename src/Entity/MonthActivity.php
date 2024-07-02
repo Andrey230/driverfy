@@ -47,6 +47,9 @@ class MonthActivity
     #[ORM\Column]
     private ?int $count_nine = null;
 
+    #[ORM\Column]
+    private ?int $total_unknown_days = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -168,6 +171,7 @@ class MonthActivity
             'totalDistance' => $this->getTotalDistance(),
             'averageDistance' => $this->getAverageDistance(),
             'totalWorkDays' => $this->getTotalWorkDays(),
+            'totalUnknownDays' => $this->getTotalUnknownDays(),
             'totalDrive' => $this->getTotalDrive(),
             'totalWork' => $this->getTotalWork(),
             'countEight' => $this->getCountEight(),
@@ -202,6 +206,18 @@ class MonthActivity
     public function setCountNine(int $count_nine): static
     {
         $this->count_nine = $count_nine;
+
+        return $this;
+    }
+
+    public function getTotalUnknownDays(): ?int
+    {
+        return $this->total_unknown_days;
+    }
+
+    public function setTotalUnknownDays(int $total_unknown_days): static
+    {
+        $this->total_unknown_days = $total_unknown_days;
 
         return $this;
     }

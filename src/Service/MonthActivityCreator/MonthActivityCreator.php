@@ -28,6 +28,7 @@ class MonthActivityCreator implements MonthActivityCreatorInterface
             $activities['totalDistance'],
             $activities['averageDistance'],
             $activities['totalWorkDays'],
+            $activities['totalUnknownDays'],
             $activities['totalDriveTime'],
             $activities['totalWorkTime'],
             $activities['countEightPlus'],
