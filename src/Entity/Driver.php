@@ -32,6 +32,7 @@ class Driver
      * @var Collection<int, MonthActivity>
      */
     #[ORM\OneToMany(targetEntity: MonthActivity::class, mappedBy: 'driver_id', orphanRemoval: true)]
+    #[ORM\OrderBy(['month' => 'DESC'])]
     private Collection $monthActivities;
 
     public function __construct()

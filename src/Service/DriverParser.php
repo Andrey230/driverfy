@@ -20,7 +20,7 @@ class DriverParser implements ParserInterface
 
         $output = [];
         $return_var = 0;
-        exec($command . ' 2>&1', $output, $return_var);
+        exec($command, $output, $return_var);
 
         $json_string = implode("\n", $output);
         $data = json_decode($json_string, true);

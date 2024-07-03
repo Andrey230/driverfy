@@ -47,6 +47,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Driver>
      */
     #[ORM\OneToMany(targetEntity: Driver::class, mappedBy: 'userId', orphanRemoval: true)]
+    #[ORM\OrderBy(['name' => 'ASC'])]
     private Collection $drivers;
 
     #[ORM\Column]

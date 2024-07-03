@@ -9,6 +9,8 @@ abstract class AbstractParser implements ParserInterface
     private array $countries;
     private array $countriesRange;
 
+    protected string $driverIdentificationKey = 'DriverCardIdentification';
+
     public function __construct(
         public array $data,
         public int $fullDayStart,
@@ -254,7 +256,7 @@ abstract class AbstractParser implements ParserInterface
 
     protected function getDriverIdentification(): array
     {
-        $idBlock = $this->getBlockData('DriverCardIdentification');
+        $idBlock = $this->getBlockData($this->driverIdentificationKey);
 
         return [
             'name' => $idBlock['HolderIdentification']['CardHolderName']['HolderSurname'].' '.$idBlock['HolderIdentification']['CardHolderName']['HolderFirstNames'],
